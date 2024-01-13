@@ -5,3 +5,4 @@ format: jb-book
 root: intro
 chapters:
 - file: python
+- file: numpy_a
