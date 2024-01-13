@@ -1,8 +1,9 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: Análisis Numérico 2024
+title: Repaso de Análisis y Modelamiento Numérico
 author: Carlos Aznarán
+copyright: 2024
 logo: logo.jpg
 
 # Force re-execution of notebooks on each build.
