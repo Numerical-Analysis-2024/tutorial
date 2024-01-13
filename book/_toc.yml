@@ -7,3 +7,4 @@ chapters:
 - file: python
 - file: numpy_a
 - file: numpy_b
+- file: linear_algebra
