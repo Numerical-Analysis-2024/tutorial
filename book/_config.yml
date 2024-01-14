@@ -3,7 +3,7 @@
 
 title: Repaso de Análisis y Modelamiento Numérico
 author: Carlos Aznarán
-copyright: 2024
+copyright: "2024"
 logo: logo.jpg
 
 # Force re-execution of notebooks on each build.

@@ -37,7 +37,7 @@ jobs:
             cd /work/book
             poetry config virtualenvs.in-project true
             poetry config virtualenvs.options.system-site-packages true
-            poetry install
+            poetry install --no-root
             poetry run jb build .
 
       - name: "Tar files"
