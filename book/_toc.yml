@@ -9,3 +9,6 @@ chapters:
 - file: numpy_b
 - file: linear_algebra
 - file: eigenvalues
+- file: binario
+- file: lorenz
+- file: heat
