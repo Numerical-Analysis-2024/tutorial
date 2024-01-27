@@ -12,3 +12,4 @@ chapters:
 - file: binario
 - file: lorenz
 - file: heat
+- file: lu
