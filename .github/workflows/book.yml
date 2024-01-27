@@ -39,6 +39,7 @@ jobs:
             poetry config virtualenvs.options.system-site-packages true
             poetry install -q --no-root
             poetry run jb build .
+            cat /work/book/_build/html/reports/lorenz.err.log
 
       - name: "Tar files"
         run: |
