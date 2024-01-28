@@ -13,3 +13,4 @@ chapters:
 - file: lorenz
 - file: heat
 - file: lu
+- file: special
