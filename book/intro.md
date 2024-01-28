@@ -1,4 +1,4 @@
-# Tutorial de Análisis Numérico 2024
+# Repaso de Análisis Numérico I 2024
 
 ```{tableofcontents}
 ```
