@@ -22,6 +22,12 @@ parts:
       - file: lu
       - file: special
       - file: norms
+  - caption: Sistemas de ecuaciones no lineales
+    chapters:
+      - file: lu
+  - caption: Interpolación
+    chapters:
+      - file: lu
   - caption: Referencias
     numbered: false
     chapters:
