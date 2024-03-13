@@ -1,0 +1,1364 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Factorización LU &#8212; Repaso de Análisis y Modelamiento Numérico I</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="_static/documentation_options.js?v=78d55cf8"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/translations.js?v=efdbd0b9"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=36754332"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=afe5de03"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'lu';</script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="Sistemas de Ecuaciones Lineales Especiales" href="special.html" />
+    <link rel="prev" title="Tutorial binario" href="binario.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Saltar al contenido principal</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.jpg" class="logo__image only-light" alt="Repaso de Análisis y Modelamiento Numérico I - Home"/>
+    <script>document.write(`<img src="_static/logo.jpg" class="logo__image only-dark" alt="Repaso de Análisis y Modelamiento Numérico I - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Búsqueda</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Repaso de Análisis Numérico I 2024
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introducción a Python, NumPy y Matplotlib</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="intro_python/python.html">Introducción a la programación en lenguaje Python</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="intro_python/numpy_a.html">Manejo de vectores y matrices en Python: Módulo Numpy Parte 1</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="intro_python/numpy_b.html">Manejo de vectores y matrices en Python: Módulo NumPy Parte 2</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="intro_python/linear_algebra.html">Álgebra Lineal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_python/eigenvalues.html">Ecuaciones Diferenciales Ordinarias</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_python/lorenz.html">Sistema de Lorenz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro_python/heat.html">Ecuación de calor</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Numéros de máquina, cambio de base</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="binario.html">Tutorial binario</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Sistemas de ecuaciones lineales</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Factorización LU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="special.html">Sistemas de Ecuaciones Lineales Especiales</a></li>
+<li class="toctree-l1"><a class="reference internal" href="norms.html">Normas</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/Numerical-Analysis-2024/tutorial" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Repositorio de origen"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/Numerical-Analysis-2024/tutorial/issues/new?title=Issue%20on%20page%20%2Flu.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Abrir un problema"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/lu.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="claro/oscuro" aria-label="claro/oscuro" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Factorización LU</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lufactsimple-m"><code class="docutils literal notranslate"><span class="pre">LUFactSimple.m</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-de-lufactsimple-m">Prueba de <code class="docutils literal notranslate"><span class="pre">LUFactSimple.m</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tridiagonal-m"><code class="docutils literal notranslate"><span class="pre">TriDiagonal.m</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-de-tridiagonal-m">Prueba de <code class="docutils literal notranslate"><span class="pre">TriDiagonal.m</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cyclicallytridiagonal-m"><code class="docutils literal notranslate"><span class="pre">CyclicallyTriDiagonal.m</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-de-cyclicallytridiagonal-m">Prueba de <code class="docutils literal notranslate"><span class="pre">CyclicallyTriDiagonal.m</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lufactefficient-m"><code class="docutils literal notranslate"><span class="pre">LUFactEfficient.m</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-de-lufactefficient-m">Prueba de <code class="docutils literal notranslate"><span class="pre">LUFactEfficient.m</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choleskydecomposition-m"><code class="docutils literal notranslate"><span class="pre">CholeskyDecomposition.m</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-de-choleskydecomposition-m">Prueba de <code class="docutils literal notranslate"><span class="pre">CholeskyDecomposition.m</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solve-m"><code class="docutils literal notranslate"><span class="pre">Solve.m</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-de-solve-m">Prueba de <code class="docutils literal notranslate"><span class="pre">Solve.m</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="factorizacion-lu">
+<h1>Factorización LU<a class="headerlink" href="#factorizacion-lu" title="Link to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-octave notranslate"><div class="highlight"><pre><span></span><span class="n">format</span> <span class="n">long</span>
+<span class="n">fmt</span> <span class="p">=</span> <span class="n">format</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>warning: using the gnuplot graphics toolkit is discouraged
+
+The gnuplot graphics toolkit is not actively maintained and has a number
+of limitations that are unlikely to be fixed.  Communication with gnuplot
+uses a one-directional pipe and limited information is passed back to the
+Octave interpreter so most changes made interactively in the plot window
+will not be reflected in the graphics properties managed by Octave.  For
+example, if the plot window is closed with a mouse click, Octave will not
+be notified and will not update its internal list of open figure windows.
+The qt toolkit is recommended instead.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>fmt = long
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-octave notranslate"><div class="highlight"><pre><span></span><span class="nb">printf</span><span class="p">(</span><span class="s">&#39;Octave version: %s.&#39;</span><span class="p">,</span> <span class="nb">version</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Octave version: 8.4.0.
+</pre></div>
+</div>
+</div>
+</div>
+<section id="lufactsimple-m">
+<h2><code class="docutils literal notranslate"><span class="pre">LUFactSimple.m</span></code><a class="headerlink" href="#lufactsimple-m" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-octave notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="nf">[L, U, err] = LUFactSimple</span><span class="p">(</span>A<span class="p">)</span>
+<span class="w">    </span><span class="c">% LU factorization of a square matrix.</span>
+    <span class="c">%</span>
+    <span class="c">% Input</span>
+    <span class="c">%   A(1:n,1:n) : the matrix to be factorized</span>
+    <span class="c">%</span>
+    <span class="c">% Output</span>
+    <span class="c">%   L(1:n,1:n), U(1:n,1:n) : the factors in A = LU, if Gaussian</span>
+    <span class="c">%                            elimination proceeds to completion</span>
+    <span class="c">%   err : = 0 if Gaussian elimination proceeds to completion</span>
+    <span class="c">%         = 1 if a zero pivot is encountered</span>
+    <span class="n">n</span> <span class="p">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">U</span> <span class="p">=</span> <span class="n">A</span><span class="p">;</span>
+    <span class="n">L</span> <span class="p">=</span> <span class="nb">eye</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="n">err</span> <span class="p">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="p">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="p">=</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">n</span>
+
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">U</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span> <span class="o">&gt;</span> <span class="nb">eps</span><span class="p">(</span><span class="n">U</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+                <span class="n">L</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="p">=</span> <span class="n">U</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="o">/</span> <span class="n">U</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="p">);</span>
+            <span class="k">else</span>
+                <span class="n">err</span> <span class="p">=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="k">end</span>
+
+            <span class="k">for</span> <span class="n">t</span> <span class="p">=</span> <span class="n">k</span><span class="p">:</span><span class="n">n</span>
+                <span class="n">U</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="p">=</span> <span class="n">U</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="n">L</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">U</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">t</span><span class="p">);</span>
+            <span class="k">end</span>
+
+        <span class="k">end</span>
+
+    <span class="k">end</span>
+
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="prueba-de-lufactsimple-m">
+<h3>Prueba de <code class="docutils literal notranslate"><span class="pre">LUFactSimple.m</span></code><a class="headerlink" href="#prueba-de-lufactsimple-m" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-octave notranslate"><div class="highlight"><pre><span></span><span class="n">clearvars</span>
+
+<span class="n">n</span> <span class="p">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="n">A</span> <span class="p">=</span> <span class="nb">rand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+<span class="nb">tic</span>
+<span class="p">[</span><span class="n">L</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">err</span><span class="p">]</span> <span class="p">=</span> <span class="n">LUFactSimple</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="nb">toc</span>
+
+<span class="n">L</span> <span class="o">*</span> <span class="n">U</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>A =
+
+   3.056706821186225e-01   6.088468609611400e-01   2.919717966731074e-01
+   6.682212947881283e-02   6.545503374070261e-02   1.609682893059851e-01
+   3.228596575033525e-01   7.389266033264623e-01   2.013056958649847e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>L =
+
+   1.000000000000000                   0                   0
+   0.218608238826388   1.000000000000000                   0
+   1.056233640941919  -1.416861797493461   1.000000000000000
+
+U =
+
+   0.305670682118622   0.608846860961140   0.291971796673107
+                   0  -0.067643906248987   0.097140849048301
+                   0                   0   0.030550420005211
+
+err = 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Elapsed time is 1.02046 seconds.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ans =
+
+   3.056706821186225e-01   6.088468609611400e-01   2.919717966731074e-01
+   6.682212947881283e-02   6.545503374070261e-02   1.609682893059851e-01
+   3.228596575033525e-01   7.389266033264623e-01   2.013056958649847e-01
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="tridiagonal-m">
+<h2><code class="docutils literal notranslate"><span class="pre">TriDiagonal.m</span></code><a class="headerlink" href="#tridiagonal-m" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-octave notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="nf">[x, err] = TriDiagonal</span><span class="p">(</span>a, b, c, f<span class="p">)</span>
+<span class="w">    </span><span class="c">% Solution of a linear system of equations with a tridiagonal</span>
+    <span class="c">% matrix.</span>
+    <span class="c">%</span>
+    <span class="c">%   a(k) x(k-1) + b(k) x(k) + c(k) x(k+1) = f(k)</span>
+    <span class="c">%</span>
+    <span class="c">% with a(1) = c(n) = 0.</span>
+    <span class="c">%</span>
+    <span class="c">% Input</span>
+    <span class="c">%   a(1:n), b(1:n), c(1:n) : the coefficients of the system</span>
+    <span class="c">%                            matrix</span>
+    <span class="c">%   f(1:n) : the right hand side vector</span>
+    <span class="c">%</span>
+    <span class="c">% Output</span>
+    <span class="c">%   x(1:n) : the solution to the linear system of equations, if</span>
+    <span class="c">%            no division by zero occurs</span>
+    <span class="c">%   err : = 0, if no division by zero occurs</span>
+    <span class="c">%         = 1, if division by zero is encountered</span>
+    <span class="n">n</span> <span class="p">=</span> <span class="nb">length</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+    <span class="n">alpha</span> <span class="p">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="nb">beta</span> <span class="p">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">err</span> <span class="p">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">b</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="o">&gt;</span> <span class="nb">eps</span><span class="p">(</span><span class="n">b</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">alpha</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">=</span> <span class="o">-</span><span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">b</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="nb">beta</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">=</span> <span class="n">f</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">b</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="k">else</span>
+        <span class="n">err</span> <span class="p">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="k">end</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="p">=</span> <span class="mi">2</span><span class="p">:</span><span class="n">n</span>
+        <span class="n">denominator</span> <span class="p">=</span> <span class="n">a</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">denominator</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">eps</span><span class="p">(</span><span class="n">denominator</span><span class="p">)</span>
+            <span class="n">alpha</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="p">=</span><span class="o">-</span> <span class="n">c</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">/</span> <span class="n">denominator</span><span class="p">;</span>
+            <span class="nb">beta</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="p">=</span> <span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">-</span> <span class="n">a</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="nb">beta</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="n">denominator</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="n">err</span> <span class="p">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="k">end</span>
+
+    <span class="k">end</span>
+
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">a</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="o">&gt;</span> <span class="nb">eps</span><span class="p">(</span><span class="n">b</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">=</span> <span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">-</span> <span class="n">a</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="nb">beta</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">a</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span><span class="p">(</span><span class="n">n</span><span class="p">));</span>
+    <span class="k">else</span>
+        <span class="n">err</span> <span class="p">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="k">end</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="p">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span>
+        <span class="n">x</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="p">=</span> <span class="n">alpha</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="nb">beta</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+    <span class="k">end</span>
+
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="prueba-de-tridiagonal-m">
+<h3>Prueba de <code class="docutils literal notranslate"><span class="pre">TriDiagonal.m</span></code><a class="headerlink" href="#prueba-de-tridiagonal-m" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-octave notranslate"><div class="highlight"><pre><span></span><span class="n">clearvars</span>
+
+<span class="n">n</span> <span class="p">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="n">a</span> <span class="p">=</span> <span class="nb">rand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">b</span> <span class="p">=</span> <span class="nb">rand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">c</span> <span class="p">=</span> <span class="nb">rand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">f</span> <span class="p">=</span> <span class="nb">rand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="nb">tic</span>
+<span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">err</span><span class="p">]</span> <span class="p">=</span> <span class="n">TriDiagonal</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+<span class="nb">toc</span>
+
+<span class="n">lhs</span> <span class="p">=</span> <span class="p">@(</span><span class="n">k</span><span class="p">)</span> <span class="n">a</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+<span class="n">rhs</span> <span class="p">=</span> <span class="p">@(</span><span class="n">k</span><span class="p">)</span> <span class="n">f</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+
+<span class="nb">printf</span><span class="p">(</span><span class="s">&#39;k \t lhs(k) \t rhs(k)\n&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span><span class="p">=</span><span class="mi">2</span><span class="p">:</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span>
+    <span class="nb">printf</span><span class="p">(</span><span class="s">&#39;k = %d\t%f\t%f\n&#39;</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">lhs</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">rhs</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>a =
+
+   6.445117039681636e-02
+   5.332556901630551e-01
+   4.981389632805200e-01
+   7.401242410348245e-01
+   3.829634214955718e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>b =
+
+   1.041236599051615e-01
+   3.409549621169176e-01
+   3.187367369526989e-01
+   4.069493619024267e-02
+   1.652976864354783e-02
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>c =
+
+   3.820762432565784e-01
+   8.893691341604276e-01
+   2.608872056580902e-02
+   2.027511512952493e-01
+   4.840668692642102e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>f =
+
+   8.729107046860221e-01
+   8.212228879351908e-01
+   5.594645151285431e-01
+   2.696795541134822e-02
+   8.286503442353729e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>x =
+
+ Columns 1 through 3:
+
+   2.201308161639098   1.684748669089029  -1.042380040074319
+
+ Columns 4 and 5:
+
+   2.011228271078053   3.534440523309921
+
+err = 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Elapsed time is 1.01958 seconds.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>k 	 lhs(k) 	 rhs(k)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>k = 2	0.821223	0.821223
+k = 3	0.559465	0.559465
+k = 4	0.026968	0.026968
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="cyclicallytridiagonal-m">
+<h2><code class="docutils literal notranslate"><span class="pre">CyclicallyTriDiagonal.m</span></code><a class="headerlink" href="#cyclicallytridiagonal-m" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-octave notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="nf">[x, err] = CyclicallyTriDiagonal</span><span class="p">(</span>a, b, c, f<span class="p">)</span>
+<span class="w">    </span><span class="c">% Solution of a cyclically tridiagonal linear system of equations:</span>
+    <span class="c">%</span>
+    <span class="c">%   b(1) x(  1) + c(1) x(  2) + a(1) x(  n) = f(1),</span>
+    <span class="c">%   a(k) x(k-1) + b(k) x(  k) + c(k) x(k+1) = f(k),</span>
+    <span class="c">%   c(n) x(  1) + a(n) x(n-1) + b(n) x(  n) = f(n).</span>
+    <span class="c">%</span>
+    <span class="c">% Input</span>
+    <span class="c">%   a(1:n), b(1:n), c(1:n) : the coefficients of the system</span>
+    <span class="c">%                            matrix</span>
+    <span class="c">%   f(1:n) : the right hand side vector</span>
+    <span class="c">%</span>
+    <span class="c">% Output</span>
+    <span class="c">%   x(1:n) : the solution to the linear system of equations, if</span>
+    <span class="c">%            no division by zero is encountered</span>
+    <span class="c">%   err : = 0, if division by zero does not occur</span>
+    <span class="c">%         = 1, if division by zero occurs</span>
+    <span class="n">n</span> <span class="p">=</span> <span class="nb">length</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+    <span class="n">err</span> <span class="p">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">newa</span> <span class="p">=</span> <span class="n">a</span><span class="p">(</span><span class="mi">2</span><span class="p">:</span><span class="n">n</span><span class="p">);</span>
+    <span class="n">newa</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">newb</span> <span class="p">=</span> <span class="n">b</span><span class="p">(</span><span class="mi">2</span><span class="p">:</span><span class="n">n</span><span class="p">);</span>
+    <span class="n">newc</span> <span class="p">=</span> <span class="n">c</span><span class="p">(</span><span class="mi">2</span><span class="p">:</span><span class="n">n</span><span class="p">);</span>
+    <span class="n">newc</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">newf</span> <span class="p">=</span> <span class="n">f</span><span class="p">(</span><span class="mi">2</span><span class="p">:</span><span class="n">n</span><span class="p">);</span>
+    <span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="n">err</span><span class="p">]</span> <span class="p">=</span> <span class="n">TriDiagonal</span><span class="p">(</span><span class="n">newa</span><span class="p">,</span> <span class="n">newb</span><span class="p">,</span> <span class="n">newc</span><span class="p">,</span> <span class="n">newf</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="n">err</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="k">end</span>
+
+    <span class="n">newf</span> <span class="p">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">newf</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">=</span><span class="o">-</span> <span class="n">a</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+    <span class="n">newf</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">=</span> <span class="o">-</span><span class="n">c</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="p">[</span><span class="n">v</span><span class="p">,</span> <span class="n">err</span><span class="p">]</span> <span class="p">=</span> <span class="n">TriDiagonal</span><span class="p">(</span><span class="n">newa</span><span class="p">,</span> <span class="n">newb</span><span class="p">,</span> <span class="n">newc</span><span class="p">,</span> <span class="n">newf</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="n">err</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="k">end</span>
+
+    <span class="n">x</span> <span class="p">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">denominator</span> <span class="p">=</span> <span class="n">b</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">v</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">a</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">v</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">denominator</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">eps</span><span class="p">(</span><span class="n">denominator</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">=</span> <span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">a</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="n">denominator</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="n">err</span> <span class="p">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="k">end</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="p">=</span> <span class="mi">2</span><span class="p">:</span><span class="n">n</span>
+        <span class="n">x</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="p">=</span> <span class="n">u</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">v</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="k">end</span>
+
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="prueba-de-cyclicallytridiagonal-m">
+<h3>Prueba de <code class="docutils literal notranslate"><span class="pre">CyclicallyTriDiagonal.m</span></code><a class="headerlink" href="#prueba-de-cyclicallytridiagonal-m" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-octave notranslate"><div class="highlight"><pre><span></span><span class="n">clearvars</span>
+
+<span class="n">n</span> <span class="p">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="n">a</span> <span class="p">=</span> <span class="nb">rand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">b</span> <span class="p">=</span> <span class="nb">rand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">c</span> <span class="p">=</span> <span class="nb">rand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">f</span> <span class="p">=</span> <span class="nb">rand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="nb">tic</span>
+<span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">err</span><span class="p">]</span> <span class="p">=</span> <span class="n">CyclicallyTriDiagonal</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+<span class="nb">toc</span>
+
+<span class="n">lhs</span> <span class="p">=</span> <span class="p">@(</span><span class="n">k</span><span class="p">)</span> <span class="n">a</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+<span class="n">rhs</span> <span class="p">=</span> <span class="p">@(</span><span class="n">k</span><span class="p">)</span> <span class="n">f</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+
+<span class="nb">printf</span><span class="p">(</span><span class="s">&#39;k \t lhs(k) \t rhs(k)\n&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span><span class="p">=</span><span class="mi">2</span><span class="p">:</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span>
+    <span class="nb">printf</span><span class="p">(</span><span class="s">&#39;k = %d\t%f\t%f\n&#39;</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">lhs</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">rhs</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>a =
+
+   6.059957294775455e-01
+   6.042637460194791e-01
+   5.038360648527884e-02
+   4.945086732395564e-01
+   5.090352416713694e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>b =
+
+   0.726704002970540
+   0.702818635274256
+   0.985637784948227
+   0.849227481832581
+   0.358898807477382
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>c =
+
+   0.224738683631668
+   0.494926409045385
+   0.698040202768743
+   0.889732822771899
+   0.282191675544648
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>f =
+
+   4.424452677213702e-01
+   8.993469959754906e-01
+   8.547495322790144e-02
+   1.438598728088895e-01
+   3.681308194892896e-01
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>x =
+
+   0.406094197662622
+   1.238389752795072
+  -0.437245613050549
+   0.650458536588858
+  -0.216138642234659
+
+err = 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Elapsed time is 1.0203 seconds.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>k 	 lhs(k) 	 rhs(k)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>k = 2	0.899347	0.899347
+k = 3	0.085475	0.085475
+k = 4	0.143860	0.143860
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lufactefficient-m">
+<h2><code class="docutils literal notranslate"><span class="pre">LUFactEfficient.m</span></code><a class="headerlink" href="#lufactefficient-m" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-octave notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="nf">[Afact, swaps, err] = LUFactEfficient</span><span class="p">(</span>A<span class="p">)</span>
+<span class="w">    </span><span class="c">% Efficient implementation of LU factorization with partial</span>
+    <span class="c">% pivoting.</span>
+    <span class="c">%</span>
+    <span class="c">% Input</span>
+    <span class="c">%   A(1:n,1:n) : the matrix to be factorized into A = P&#39;LU</span>
+    <span class="c">%</span>
+    <span class="c">% Output</span>
+    <span class="c">%   Afact(1:n,1:n) : a matrix containing the matrices L and U</span>
+    <span class="c">%                    below and above the diagonal, respectively</span>
+    <span class="c">%   swaps : the indices that indicate the permutations</span>
+    <span class="c">%           (row swaps)</span>
+    <span class="c">%   err : = 0 if no the factorization finished successfully</span>
+    <span class="c">%         = 1 if a division by zero was encountered</span>
+    <span class="n">n</span> <span class="p">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">swaps</span> <span class="p">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">n</span><span class="p">;</span>
+    <span class="n">err</span> <span class="p">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="p">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">i</span> <span class="p">=</span> <span class="n">k</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="n">t</span> <span class="p">=</span> <span class="n">k</span><span class="p">:</span><span class="n">n</span>
+
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span> <span class="o">&gt;</span> <span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+                <span class="n">i</span> <span class="p">=</span> <span class="n">t</span><span class="p">;</span>
+            <span class="k">end</span>
+
+        <span class="k">end</span>
+
+        <span class="n">tt</span> <span class="p">=</span> <span class="n">swaps</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+        <span class="n">swaps</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="p">=</span> <span class="n">swaps</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+        <span class="n">swaps</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="p">=</span> <span class="n">tt</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">A</span><span class="p">(</span><span class="n">swaps</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">k</span><span class="p">))</span> <span class="o">&lt;</span><span class="p">=</span> <span class="nb">eps</span><span class="p">(</span><span class="n">A</span><span class="p">(</span><span class="n">swaps</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">k</span><span class="p">))</span>
+            <span class="n">err</span> <span class="p">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="k">end</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="p">=</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">n</span>
+            <span class="n">xmult</span> <span class="p">=</span> <span class="n">A</span><span class="p">(</span><span class="n">swaps</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">k</span><span class="p">)</span> <span class="o">/</span> <span class="n">A</span><span class="p">(</span><span class="n">swaps</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">k</span><span class="p">);</span>
+            <span class="n">A</span><span class="p">(</span><span class="n">swaps</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">k</span><span class="p">)</span> <span class="p">=</span> <span class="n">xmult</span><span class="p">;</span>
+
+            <span class="k">for</span> <span class="n">j</span> <span class="p">=</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">n</span>
+                <span class="n">A</span><span class="p">(</span><span class="n">swaps</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">j</span><span class="p">)</span> <span class="p">=</span> <span class="n">A</span><span class="p">(</span><span class="n">swaps</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">j</span><span class="p">)</span> <span class="o">-</span> <span class="n">xmult</span> <span class="o">*</span> <span class="n">A</span><span class="p">(</span><span class="n">swaps</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">j</span><span class="p">);</span>
+            <span class="k">end</span>
+
+        <span class="k">end</span>
+
+    <span class="k">end</span>
+
+    <span class="n">Afact</span> <span class="p">=</span> <span class="n">A</span><span class="p">;</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="prueba-de-lufactefficient-m">
+<h3>Prueba de <code class="docutils literal notranslate"><span class="pre">LUFactEfficient.m</span></code><a class="headerlink" href="#prueba-de-lufactefficient-m" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-octave notranslate"><div class="highlight"><pre><span></span><span class="n">clearvars</span>
+
+<span class="n">n</span> <span class="p">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="n">A</span> <span class="p">=</span> <span class="nb">rand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+<span class="nb">tic</span>
+<span class="p">[</span><span class="n">Afact</span><span class="p">,</span> <span class="n">swaps</span><span class="p">,</span> <span class="n">err</span><span class="p">]</span> <span class="p">=</span> <span class="n">LUFactEfficient</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="nb">toc</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>A =
+
+   0.216528979691799   0.643649646991240   0.495451476110005
+   0.821195972049146   0.498304821537976   0.460678638865761
+   0.962601748413823   0.555782070380011   0.522072763404185
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Afact =
+
+   2.249413945576099e-01   5.186312530098447e-01   3.780157006493223e-01
+   8.531004368133691e-01   4.659745124016138e-02  -2.316431821733966e-03
+   9.626017484138233e-01   5.557820703800107e-01   5.220727634041845e-01
+
+swaps =
+
+   3   1   2
+
+err = 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Elapsed time is 1.02002 seconds.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="choleskydecomposition-m">
+<h2><code class="docutils literal notranslate"><span class="pre">CholeskyDecomposition.m</span></code><a class="headerlink" href="#choleskydecomposition-m" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-octave notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="nf">[R, err] = CholeskyDecomposition</span><span class="p">(</span>A<span class="p">)</span>
+<span class="w">    </span><span class="c">% Choleksy factorization of the HPD matrix A:</span>
+    <span class="c">%   A = R&#39;*R</span>
+    <span class="c">%</span>
+    <span class="c">% Input:</span>
+    <span class="c">%   A(1:n,1:n) : an HPD matrix</span>
+    <span class="c">%</span>
+    <span class="c">% Output:</span>
+    <span class="c">%   R(1:n,1:n) : The upper triangular matrix satisfying A = R&#39;*R</span>
+    <span class="c">%   err : = 0 if the decomposition finished successfully</span>
+    <span class="c">%         = 1 if an error occurred</span>
+    <span class="n">err</span> <span class="p">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">n</span> <span class="p">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">R</span> <span class="p">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+    <span class="n">R</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">=</span> <span class="nb">sqrt</span><span class="p">(</span><span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="p">=</span> <span class="mi">2</span><span class="p">:</span><span class="n">n</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="p">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="nb">sum</span> <span class="p">=</span> <span class="n">A</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">);</span>
+
+            <span class="k">for</span> <span class="n">k</span> <span class="p">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="nb">sum</span> <span class="p">=</span> <span class="nb">sum</span> <span class="o">-</span> <span class="n">R</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="nb">conj</span><span class="p">(</span><span class="n">R</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">j</span><span class="p">));</span>
+            <span class="k">end</span>
+
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">R</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span> <span class="o">&gt;</span> <span class="nb">eps</span><span class="p">(</span><span class="n">R</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+                <span class="n">R</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="p">=</span> <span class="nb">sum</span> <span class="o">/</span> <span class="n">R</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="p">);</span>
+            <span class="k">else</span>
+                <span class="n">err</span> <span class="p">=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="k">end</span>
+
+        <span class="k">end</span>
+
+        <span class="nb">sum</span> <span class="p">=</span> <span class="n">A</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="p">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="nb">sum</span> <span class="p">=</span> <span class="nb">sum</span> <span class="o">-</span> <span class="n">R</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="nb">conj</span><span class="p">(</span><span class="n">R</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">i</span><span class="p">));</span>
+        <span class="k">end</span>
+
+        <span class="n">R</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="p">=</span> <span class="nb">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">);</span>
+    <span class="k">end</span>
+
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="prueba-de-choleskydecomposition-m">
+<h3>Prueba de <code class="docutils literal notranslate"><span class="pre">CholeskyDecomposition.m</span></code><a class="headerlink" href="#prueba-de-choleskydecomposition-m" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-octave notranslate"><div class="highlight"><pre><span></span><span class="n">clearvars</span>
+
+<span class="n">A</span> <span class="p">=</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="nb">tic</span>
+<span class="p">[</span><span class="n">R</span><span class="p">,</span> <span class="n">err</span><span class="p">]</span> <span class="p">=</span> <span class="n">CholeskyDecomposition</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="nb">toc</span>
+
+<span class="n">R</span><span class="o">&#39;</span> <span class="o">*</span> <span class="n">R</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>A =
+
+   1.000000000000000   0.500000000000000
+   0.500000000000000   1.000000000000000
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>R =
+
+   1.000000000000000   0.500000000000000
+                   0   0.866025403784439
+
+err = 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Elapsed time is 1.01999 seconds.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ans =
+
+   1.000000000000000   0.500000000000000
+   0.500000000000000   1.000000000000000
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="solve-m">
+<h2><code class="docutils literal notranslate"><span class="pre">Solve.m</span></code><a class="headerlink" href="#solve-m" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-octave notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="nf">[x, err] = Solve</span><span class="p">(</span>A, f<span class="p">)</span>
+<span class="w">    </span><span class="c">% Solves the system Ax = f.</span>
+    <span class="c">%</span>
+    <span class="c">% Input</span>
+    <span class="c">%   A(1:n,1:n) : the coefficient matrix</span>
+    <span class="c">%   f(1:n) : the RHS vector</span>
+    <span class="c">%</span>
+    <span class="c">% Output:</span>
+    <span class="c">%   x(1:n) : the solution vector</span>
+    <span class="c">%   err : = 0 if the solution was found successfully</span>
+    <span class="c">%         = 1 if an error occurred during the process</span>
+    <span class="n">n</span> <span class="p">=</span> <span class="nb">length</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+    <span class="n">err</span> <span class="p">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">[</span><span class="n">AA</span><span class="p">,</span> <span class="n">swaps</span><span class="p">,</span> <span class="n">err</span><span class="p">]</span> <span class="p">=</span> <span class="n">LUFactEfficient</span><span class="p">(</span><span class="n">A</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="n">err</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">return</span>
+    <span class="k">end</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="p">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="p">=</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">n</span>
+            <span class="n">f</span><span class="p">(</span><span class="n">swaps</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="p">=</span> <span class="n">f</span><span class="p">(</span><span class="n">swaps</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="o">-</span> <span class="n">AA</span><span class="p">(</span><span class="n">swaps</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">k</span><span class="p">)</span> <span class="p">...</span>
+                <span class="o">*</span><span class="n">f</span><span class="p">(</span><span class="n">swaps</span><span class="p">(</span><span class="n">k</span><span class="p">));</span>
+        <span class="k">end</span>
+
+    <span class="k">end</span>
+
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">AA</span><span class="p">(</span><span class="n">swaps</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">n</span><span class="p">))</span> <span class="o">&gt;</span> <span class="nb">eps</span><span class="p">(</span><span class="n">AA</span><span class="p">(</span><span class="n">swaps</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">n</span><span class="p">))</span>
+        <span class="n">x</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">=</span> <span class="n">f</span><span class="p">(</span><span class="n">swaps</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="o">/</span> <span class="n">AA</span><span class="p">(</span><span class="n">swaps</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">n</span><span class="p">);</span>
+    <span class="k">else</span>
+        <span class="n">err</span> <span class="p">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="k">end</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="p">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span>
+        <span class="n">xsum</span> <span class="p">=</span> <span class="n">f</span><span class="p">(</span><span class="n">swaps</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="p">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">n</span>
+            <span class="n">xsum</span> <span class="p">=</span> <span class="n">xsum</span> <span class="o">-</span> <span class="n">AA</span><span class="p">(</span><span class="n">swaps</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">j</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span><span class="p">(</span><span class="n">j</span><span class="p">);</span>
+        <span class="k">end</span>
+
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">AA</span><span class="p">(</span><span class="n">swaps</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">i</span><span class="p">))</span> <span class="o">&gt;</span> <span class="nb">eps</span><span class="p">(</span><span class="n">AA</span><span class="p">(</span><span class="n">swaps</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">i</span><span class="p">))</span>
+            <span class="n">x</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="p">=</span> <span class="n">xsum</span> <span class="o">/</span> <span class="n">AA</span><span class="p">(</span><span class="n">swaps</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">i</span><span class="p">);</span>
+        <span class="k">else</span>
+            <span class="n">err</span> <span class="p">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="k">end</span>
+
+    <span class="k">end</span>
+
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="prueba-de-solve-m">
+<h3>Prueba de <code class="docutils literal notranslate"><span class="pre">Solve.m</span></code><a class="headerlink" href="#prueba-de-solve-m" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-octave notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="p">=</span> <span class="mi">10</span>
+<span class="n">A</span> <span class="p">=</span> <span class="nb">rand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+<span class="n">f</span> <span class="p">=</span> <span class="nb">rand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="nb">tic</span>
+<span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">err</span><span class="p">]</span> <span class="p">=</span> <span class="n">Solve</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+<span class="nb">toc</span>
+
+<span class="n">A</span> <span class="o">*</span> <span class="n">x</span><span class="o">&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n = 10
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>f =
+
+   0.685099476770965
+   0.520678473725898
+   0.578521305706107
+   0.911391295258508
+   0.582456071431125
+   0.472723100132933
+   0.104491426854491
+   0.244827176112635
+   0.419517203032164
+   0.360393685671311
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>x =
+
+ Columns 1 through 3:
+
+  -2.502039931815923e-02   2.649726395906523e-01   8.581742417098135e-01
+
+ Columns 4 through 6:
+
+  -5.407031883657749e-01  -3.529740931680693e-01  -6.034555149418950e-01
+
+ Columns 7 through 9:
+
+   6.306924534166705e-01  -1.550547901897423e-01   6.149116854631604e-01
+
+ Column 10:
+
+   2.734378344029734e-01
+
+err = 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Elapsed time is 1.02202 seconds.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ans =
+
+   0.685099476770965
+   0.520678473725898
+   0.578521305706107
+   0.911391295258508
+   0.582456071431126
+   0.472723100132934
+   0.104491426854491
+   0.244827176112635
+   0.419517203032164
+   0.360393685671311
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "octave"
+        },
+        kernelOptions: {
+            name: "octave",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'octave'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="binario.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">Tutorial binario</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="special.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">Sistemas de Ecuaciones Lineales Especiales</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lufactsimple-m"><code class="docutils literal notranslate"><span class="pre">LUFactSimple.m</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-de-lufactsimple-m">Prueba de <code class="docutils literal notranslate"><span class="pre">LUFactSimple.m</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tridiagonal-m"><code class="docutils literal notranslate"><span class="pre">TriDiagonal.m</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-de-tridiagonal-m">Prueba de <code class="docutils literal notranslate"><span class="pre">TriDiagonal.m</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cyclicallytridiagonal-m"><code class="docutils literal notranslate"><span class="pre">CyclicallyTriDiagonal.m</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-de-cyclicallytridiagonal-m">Prueba de <code class="docutils literal notranslate"><span class="pre">CyclicallyTriDiagonal.m</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lufactefficient-m"><code class="docutils literal notranslate"><span class="pre">LUFactEfficient.m</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-de-lufactefficient-m">Prueba de <code class="docutils literal notranslate"><span class="pre">LUFactEfficient.m</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choleskydecomposition-m"><code class="docutils literal notranslate"><span class="pre">CholeskyDecomposition.m</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-de-choleskydecomposition-m">Prueba de <code class="docutils literal notranslate"><span class="pre">CholeskyDecomposition.m</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solve-m"><code class="docutils literal notranslate"><span class="pre">Solve.m</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-de-solve-m">Prueba de <code class="docutils literal notranslate"><span class="pre">Solve.m</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por Carlos Aznarán
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
