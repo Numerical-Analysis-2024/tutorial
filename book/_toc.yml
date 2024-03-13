@@ -8,12 +8,13 @@ parts:
     numbered: true
     chapters:
       - file: intro_python/python
-      - file: intro_python/numpy_a
-      - file: intro_python/numpy_b
-      - file: intro_python/linear_algebra
-      - file: intro_python/eigenvalues
-      - file: intro_python/lorenz
-      - file: intro_python/heat
+        sections:
+          - file: intro_python/numpy_a
+          - file: intro_python/numpy_b
+          - file: intro_python/linear_algebra
+          - file: intro_python/eigenvalues
+          - file: intro_python/lorenz
+          - file: intro_python/heat
   - caption: Numéros de máquina, cambio de base
     chapters:
       - file: binario
