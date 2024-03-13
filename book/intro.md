@@ -17,7 +17,8 @@ Bienvenido(a) 😃.
 - [`python-matplotlib-3.8.2-1`](https://archlinux.org/packages/extra/x86_64/python-matplotlib)
 - [`python-tabulate-0.9.0-2`](https://archlinux.org/packages/extra/any/python-tabulate)
 
-Hemos seguido los capítulos 1-5 del libro de texto {cite}`salgado_classical_2023`.
-
-<!-- https://wwwpub.zih.tu-dresden.de/~praetori/scprog/so2023 -->
-<!-- https://cpp-review-dune.github.io/meetings-2022/2022-05-02.pdf#page=5 -->
+Hemos seguido los capítulos 1-10 del libro de texto {cite}`salgado_classical_2023`.
+Si desea codificar los algoritmos en el lenguaje
+[C++](https://wwwpub.zih.tu-dresden.de/~praetori/scprog/so2023), es recomendable
+utilizar [algún módulo](https://cpp-review-dune.github.io/meetings-2022/2022-05-02.pdf#page=5)
+de álgebra lineal numérica.
