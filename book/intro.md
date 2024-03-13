@@ -14,3 +14,4 @@ Bienvenido(a) 😃.
 
 - [`octave`](https://archlinux.org/packages/extra/x86_64/octave)
 - [`python-numpy`](https://archlinux.org/packages/extra/x86_64/python-numpy)
+- [`python-matplotlib`](https://archlinux.org/packages/extra/x86_64/python-matplotlib)
