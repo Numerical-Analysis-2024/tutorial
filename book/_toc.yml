@@ -5,7 +5,7 @@ format: jb-book
 root: intro
 parts:
   - caption: Introducción a Python, NumPy y Matplotlib
-    numbered: true
+    numbered: false
     chapters:
       - file: intro_python/python
         sections:
@@ -23,13 +23,10 @@ parts:
       - file: lu
       - file: special
       - file: norms
-  # - caption: Sistemas de ecuaciones no lineales
-  #   chapters:
-  #     - file: lu
-  # - caption: Interpolación
-  #   chapters:
-  #     - file: lu
-  - caption: Referencias
-    numbered: false
+  - caption: Sistemas de ecuaciones no lineales
     chapters:
-      - file: bibliography
+      - file: newton
+      - file: nonlinear
+  - caption: Interpolación
+    chapters:
+      - file: lagrange
