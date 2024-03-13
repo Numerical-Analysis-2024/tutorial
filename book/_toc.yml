@@ -3,15 +3,26 @@
 
 format: jb-book
 root: intro
-chapters:
-- file: python
-- file: numpy_a
-- file: numpy_b
-- file: linear_algebra
-- file: eigenvalues
-- file: binario
-- file: lorenz
-- file: heat
-- file: lu
-- file: special
-- file: norms
+parts:
+  - caption: Introducción a Python, NumPy y Matplotlib
+    numbered: true
+    chapters:
+    - file: intro_python/python
+    - file: intro_python/numpy_a
+    - file: intro_python/numpy_b
+    - file: intro_python/linear_algebra
+    - file: intro_python/eigenvalues
+    - file: intro_python/lorenz
+    - file: intro_python/heat
+  - caption: Numéros de máquina, cambio de base
+      chapters:
+        - file: binario
+  - caption: Sistemas de ecuaciones lineales
+      chapters:
+        - file: lu
+        - file: special
+        - file: norms
+  - caption: Referencias
+    numbered: false
+    chapters:
+      - file: bibliography

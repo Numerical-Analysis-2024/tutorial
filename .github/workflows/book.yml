@@ -47,7 +47,7 @@ jobs:
           mv book/_build .
           tar --zstd -cf Book.tar.zst _build
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: Book-artifact
           path: Book.tar.zst
